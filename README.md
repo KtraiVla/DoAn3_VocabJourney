@@ -16,7 +16,7 @@ Hệ thống giúp người học:
 
 Việc kết hợp giữa học tập và gamification giúp tăng **động lực học tập**, giúp người học duy trì việc học lâu dài và hiệu quả hơn.
 
----
+
 
 # 2. Mục tiêu của hệ thống
 
@@ -29,7 +29,7 @@ Hệ thống được xây dựng với các mục tiêu sau:
 - Tăng động lực học tập thông qua Gamification
 - Áp dụng phương pháp **Spaced Repetition** để ghi nhớ từ vựng hiệu quả hơn
 
----
+
 
 # 3. Đối tượng sử dụng hệ thống
 
@@ -48,7 +48,7 @@ Người học sử dụng hệ thống để:
 - Xem thống kê học tập
 - Ôn tập từ vựng theo Spaced Repetition
 
----
+
 
 ## 3.2 Quản trị viên (Admin)
 
@@ -62,7 +62,7 @@ Quản trị viên có nhiệm vụ:
 - Quản lý badge, level và challenge
 - Quản lý hệ thống gamification
 
----
+
 
 # 4. Chức năng của hệ thống
 
@@ -77,7 +77,7 @@ Hệ thống cần hỗ trợ các chức năng:
 
 Thông tin người dùng được lưu trữ để cá nhân hóa trải nghiệm học tập.
 
----
+
 
 # 4.2 Quản lý từ vựng và bài học
 
@@ -97,7 +97,7 @@ Các từ vựng được tổ chức thành:
 
 Điều này giúp người học tiếp cận từ vựng theo từng bước và dễ dàng ghi nhớ hơn.
 
----
+
 
 # 4.3 Hệ thống Quiz
 
@@ -112,7 +112,7 @@ Các dạng câu hỏi gồm:
 
 Kết quả bài quiz sẽ được lưu để phân tích tiến độ học tập.
 
----
+
 
 # 4.4 Theo dõi tiến độ học tập
 
@@ -125,7 +125,7 @@ Hệ thống ghi nhận các dữ liệu học tập của người dùng:
 
 Điều này giúp người học theo dõi sự tiến bộ của mình và ôn tập lại các nội dung chưa nắm vững.
 
----
+
 
 # 5. Hệ thống Gamification
 
@@ -153,7 +153,7 @@ Trong đó:
 - $P_{quiz}$: điểm khi hoàn thành quiz
 - $P_{challenge}$: điểm khi hoàn thành thử thách
 
----
+
 
 # 5.2 Hệ thống Level
 
@@ -193,7 +193,7 @@ Ví dụ:
 | Quiz Master | Hoàn thành 10 quiz |
 | Dedicated Learner | Học liên tục 7 ngày |
 
----
+
 
 # 5.4 Hệ thống Streak
 
@@ -237,7 +237,7 @@ $$
 Reward = BaseXP \times Difficulty
 $$
 
----
+
 
 # 5.6 Hệ thống Achievement (Thành tích)
 
@@ -251,7 +251,7 @@ Ví dụ:
 
 Các thành tích được lưu trong hồ sơ người dùng.
 
----
+
 
 # 6. Hệ thống ôn tập từ vựng thông minh (Spaced Repetition)
 
@@ -277,7 +277,7 @@ $$
 
 Phương pháp này giúp người học ôn tập từ vựng **trước khi quên hoàn toàn**.
 
----
+
 
 # 7. Kiến trúc hệ thống
 
@@ -292,28 +292,27 @@ Hệ thống bao gồm các thành phần:
 Công nghệ có thể sử dụng:
 
 - Frontend: HTML, CSS, JavaScript
-- Backend: NodeJS / PHP / Java
+- Backend: NodeJS / PHP / ASP.net
 - Database: MySQL / PostgreSQL
 
----
+
 
 # 8. Thiết kế cơ sở dữ liệu (Concept)
 
 Các bảng chính trong hệ thống:
 
-- Users
-- Vocabulary
-- Topics
-- Lessons
-- Quiz
-- Questions
-- UserProgress
-- Points
-- Levels
-- Badges
-- Challenges
-- Achievements
-- Reviews
+- NguoiDung
+- ThongKeNguoiDung
+- HuyHieuNguoiDung
+- ChuDe
+- BaiHoc
+- TuVung
+- TienDoBaiHoc
+- TienDoTuVung
+- BaiKiemTra
+- CauHoi
+- DapAn
+- KetQuaKiemTra
 
 Các bảng này giúp quản lý:
 
@@ -321,7 +320,7 @@ Các bảng này giúp quản lý:
 - Tiến độ học tập
 - Hệ thống gamification
 
----
+
 
 # 9. Yêu cầu chức năng
 
@@ -334,7 +333,7 @@ Hệ thống cần hỗ trợ các chức năng chính:
 - Theo dõi tiến độ học tập
 - Tích hợp gamification
 
----
+
 
 # 10. Yêu cầu phi chức năng
 
@@ -345,7 +344,7 @@ Hệ thống cần đảm bảo:
 - Dữ liệu được lưu trữ an toàn
 - Có khả năng mở rộng khi số lượng người dùng tăng
 
----
+
 
 # 11. Thống kê học tập
 
@@ -359,7 +358,7 @@ $$
 Accuracy = \frac{CorrectAnswers}{TotalAnswers} \times 100\%
 $$
 
----
+
 
 # 12. Hướng phát triển trong tương lai
 
@@ -371,7 +370,7 @@ Một số hướng phát triển có thể mở rộng:
 - Hệ thống bạn bè
 - Ứng dụng di động
 
----
+
 
 # 13. Kết luận
 
@@ -387,4 +386,4 @@ Việc kết hợp:
 
 giúp người học **ghi nhớ từ vựng tốt hơn và duy trì động lực học tập lâu dài**.
 
----
+
