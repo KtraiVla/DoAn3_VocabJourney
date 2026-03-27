@@ -207,7 +207,6 @@ Ví dụ phần thưởng:
 | 7 ngày | Badge |
 | 30 ngày | Achievement |
 
----
 
 # 5.5 Hệ thống Challenge
 
@@ -281,7 +280,7 @@ Công nghệ có thể sử dụng:
 - Database: MySQL / PostgreSQL
 
 
-# 8. Thiết kế cơ sở dữ liệu (Concept)
+# 8. Thiết kế cơ sở dữ liệu
 
 Các bảng chính trong hệ thống:
 
