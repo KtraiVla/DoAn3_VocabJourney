@@ -1,5 +1,6 @@
 import React from "react";
 import { BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 function Navbar() {
   return (
@@ -16,7 +17,11 @@ function Navbar() {
           {/* cta bên phải */}
           <div className="nav-actions">
             <button className="btn-login">Đăng nhập</button>
-            <button className="btn-get-started">Bắt đầu</button>
+            <button>
+              <Link className="btn-get-started" to="./dangky">
+                Bắt đầu
+              </Link>
+            </button>
           </div>
         </div>
       </nav>

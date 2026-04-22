@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowRight, Trophy, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 import "./HeroSection.css";
 
 function HeroSection() {
@@ -25,9 +26,11 @@ function HeroSection() {
           </p>
 
           <div className="hero-actions">
-            <button className="btn-primary-large">
-              Bắt đầu học <ArrowRight size={20} />
-            </button>
+            <Link to="/dangky">
+              <button className="btn-primary-large">
+                Bắt đầu học <ArrowRight size={20} />
+              </button>
+            </Link>
             <button className="btn-secondary-large">Xem thử</button>
           </div>
 

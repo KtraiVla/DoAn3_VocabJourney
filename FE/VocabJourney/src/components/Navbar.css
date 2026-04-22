@@ -58,13 +58,15 @@
 
 .btn-get-started {
   background-color: var(--primary);
-  color: white;
   font-weight: 600;
   font-size: 15px;
   padding: 10px 20px;
   border-radius: 8px;
   transition: all 0.2s ease;
   box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.2);
+  text-decoration: none;
+  color: white;
+  display: inline-block;
 }
 
 .btn-get-started:hover {
@@ -79,4 +81,3 @@
     display: none;
   }
 }
-
