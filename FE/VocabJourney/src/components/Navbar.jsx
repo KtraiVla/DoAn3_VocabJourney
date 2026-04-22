@@ -16,9 +16,13 @@ function Navbar() {
           </div>
           {/* cta bên phải */}
           <div className="nav-actions">
-            <button className="btn-login">Đăng nhập</button>
             <button>
-              <Link className="btn-get-started" to="./dangky">
+              <Link className="btn-login" to="/dangnhap">
+                Đăng nhập
+              </Link>
+            </button>
+            <button>
+              <Link className="btn-get-started" to="/dangky">
                 Bắt đầu
               </Link>
             </button>
