@@ -1,0 +1,22 @@
+.thongke{
+    padding: 100px 0;
+}
+
+.thongke-body{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background-color: red;
+    border-radius: 20px;
+    padding: 50px;
+    background: linear-gradient(to right, #00c6ff, #0072ff); /* Đổ màu từ trái (Cyan) sang phải (Blue) */
+}
+
+.thongke-item{
+    text-align: center;
+    color: #fff; 
+}
+
+.thongke-title{
+    font-size: 50px;
+    font-weight: 800;
+}

@@ -1,7 +1,8 @@
-import Navbar from "../components/Navbar";
-import HeroSection from "../components/HeroSection";
-import FeaturesSection from "../components/FeaturesSection";
-import HowItWord from "../components/HowItWord";
+import Navbar from "../components/Navbar.jsx";
+import HeroSection from "../components/HeroSection.jsx";
+import FeaturesSection from "../components/FeaturesSection.jsx";
+import HowItWord from "../components/HowItWord.jsx";
+import ThongKe from "../components/ThongKe.jsx"
 
 function HomePage() {
   return (
@@ -10,6 +11,7 @@ function HomePage() {
       <HeroSection />
       <FeaturesSection />
       <HowItWord />
+      <ThongKe/>
     </>
   );
 }
