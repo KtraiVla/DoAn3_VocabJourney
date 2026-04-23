@@ -1,3 +1,12 @@
+.db-block-header{
+    display: flex;
+}
+
+.achievements-block {
+  background-color: #fff;
+  border-radius: 32px;
+  padding: 20px;
+}
 
 .achievements-grid {
   display: flex;
@@ -13,8 +22,8 @@
 }
 
 .achievement-icon-wrap {
-  width: 64px;
-  height: 64px;
+  width: 80px;
+  height: 100px;
   background: #fffbeb;
   border: 2px solid #fde68a;
   border-radius: 16px;
@@ -32,7 +41,7 @@
 }
 
 .achievement-icon {
-  font-size: 1.75rem;
+  font-size: 3rem;
 }
 
 .achievement-label {

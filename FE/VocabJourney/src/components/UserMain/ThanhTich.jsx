@@ -8,7 +8,7 @@ const achievements = [
 
 export default function ThanhTich() {
   return (
-    <div className="db-block achievements-block">
+    <div className="achievements-block">
       <div className="db-block-header">
         <span className="db-block-icon">🏆</span>
         <h3>Thành Tích</h3>
