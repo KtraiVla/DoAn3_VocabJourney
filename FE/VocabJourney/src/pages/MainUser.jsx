@@ -11,10 +11,10 @@ function MainUser() {
     <div className="homeuser-page">
       <Navbar />
       <main className="homeuser-page-content">
-        <div className="container">
-          <HeroBanner />
-          <StatsSection></StatsSection>
+        <HeroBanner />
+        <StatsSection></StatsSection>
 
+        <div className="container">
           <div className="homeuser-grid">
             {/* bên phải */}
             <div className="homeuser-right">
