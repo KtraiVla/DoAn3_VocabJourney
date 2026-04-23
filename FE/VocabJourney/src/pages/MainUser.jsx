@@ -2,26 +2,29 @@ import Navbar from "../components/common/Navbar.jsx";
 import HeroBanner from "../components/UserMain/HeroBanner.jsx";
 import StatsSection from "../components/UserMain/StatsSection.jsx";
 import ContinueCard from "../components/UserMain/ContinueCard.jsx";
+import ReviewCard from "../components/UserMain/ReviewCard.jsx";
 
 function MainUser() {
   return (
-    <>
-      <Navbar></Navbar>
-      <HeroBanner></HeroBanner>
-      <div className="main-user-body">
-        <StatsSection></StatsSection>
-        <div className="main-user-ontap">
-            {/* bên trái  */}
-            <div className="main-user-ontap-right">
-                <ContinueCard></ContinueCard>
-            
+    <div className="homeuser-page">
+      <Navbar />
+      <main className="homeuser-page-content">
+        <div className="container">
+          <HeroBanner />
+          <StatsSection></StatsSection>
+
+          <div className="homeuser-grid">
+            {/* bên phải */}
+            <div className="homeuser-right">
+              <ContinueCard />
+              <ReviewCard />
             </div>
-            
-            
-            
-            </div>
-      </div>
-    </>
+
+            <aside className="dashboard-sidebar"></aside>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }
 export default MainUser;
