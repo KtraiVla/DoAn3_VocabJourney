@@ -1,3 +1,5 @@
+﻿using IdentityService.Repositories;
+using IdentityService.Services;
 
 namespace IdentityService
 {
@@ -7,16 +9,24 @@ namespace IdentityService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Đăng ký Repository và Service
+            builder.Services.AddScoped<UserRepository>();
+            builder.Services.AddScoped<TokenGenerator>();
+
+            // Cấu hình CORS để cho phép React (Frontend) truy cập API
+            builder.Services.AddCors(options => {
+                options.AddPolicy("AllowReact", policy => {
+                    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -25,8 +35,10 @@ namespace IdentityService
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
 
+            app.UseCors("AllowReact");
+
+            app.UseAuthorization();
 
             app.MapControllers();
 
