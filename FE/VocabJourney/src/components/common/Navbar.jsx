@@ -9,7 +9,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import "./DashboardNavbar.css";
+import "./Navbar.css";
 
 function DashboardNavbar() {
   const location = useLocation();
@@ -33,7 +33,7 @@ function DashboardNavbar() {
 
   return (
     <nav className="dashboard-navbar">
-      <div className="db-nav-container">
+      <div className="container db-nav-container">
         {/* Logo */}
         <Link to="/dashboard" className="db-nav-logo">
           <div className="db-logo-icon">
