@@ -22,12 +22,15 @@ function DangNhap() {
     }
     if(matkhau === ""){
       alert("Bạn chưa nhập mật khẩu")
+      return;
     }
     if(email.includes("@") === false){
       alert("Email sai định dạng, phải có ý tự '@'!");
+      return;
     }
     if(matkhau.length < 6){
       alert("Mật khẩu phải có ít nhất 6 ký tự!")
+      return;
     }
 
     const response = await fetch("https://localhost:7251/api/Auth/login", {

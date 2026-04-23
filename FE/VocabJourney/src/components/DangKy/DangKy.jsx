@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   User,
   Mail,
@@ -7,12 +8,67 @@ import {
   Brain,
   Sparkles,
 } from "lucide-react";
-
+import { Link, useNavigate } from "react-router-dom";
 import "./DangKy.css";
-
 import bgDangKy from "../../assets/images/hoctienganh.jpg";
 
 export default function DangKy() {
+  const navigate = useNavigate();
+  // Sử dụng state để quản lý trạng thái: họ tên, email, mk
+  const [hoten, setHoTen] = useState("");
+  const [email, setEmail] = useState("");
+  const [matkhau, setMatKhau] = useState("");
+
+  function thayDoiHoTen(e) {
+    setHoTen(e.target.value);
+  }
+  function thayDoiEmail(e) {
+    setEmail(e.target.value);
+  }
+  function thayDoiMatKhau(e) {
+    setMatKhau(e.target.value);
+  }
+
+  async function handleDangKy(e) {
+    e.preventDefault();
+    // Kiểm tra các trường nhập vào
+    if (!hoten || !email || !matkhau) {
+      alert("Vui lòng điền đủ thông tin vào các trường!");
+      return;
+    }
+    if (!email.includes("@")) {
+      alert("Email sai định dạng, phải có ý tự '@'!");
+      return;
+    }
+    if (matkhau.length < 6) {
+      alert("Mật khẩu phải có ít nhất 6 ký tự!");
+      return;
+    }
+    if (!document.getElementById("terms").checked) {
+      alert("Bạn phải đồng ý với Điều khoản dịch vụ mới được đăng ký!");
+      return;
+    }
+
+    const response = await fetch("https://localhost:7251/api/Auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: hoten,
+        email: email,
+        password: matkhau,
+      }),
+    });
+
+    if (response.ok) {
+      alert("Bạn đã đăng ký tài khoản thành công!");
+      navigate("/dangnhap");
+    } else {
+      alert("Đăng ký thất bại! Có thể tên hoặc email đã có người sử dụng!");
+    }
+  }
+
   return (
     <div className="register-page">
       {/* Left side - Info & Illustration */}
@@ -84,7 +140,12 @@ export default function DangKy() {
               <label>Họ và Tên</label>
               <div className="input-wrapper">
                 <User className="input-icon" size={20} />
-                <input type="text" placeholder="Nguyễn Văn A" required />
+                <input
+                  type="text"
+                  placeholder="Nguyễn Văn A"
+                  value={hoten}
+                  onChange={thayDoiHoTen}
+                />
               </div>
             </div>
 
@@ -95,7 +156,8 @@ export default function DangKy() {
                 <input
                   type="email"
                   placeholder="nguyenvana@example.com"
-                  required
+                  value={email}
+                  onChange={thayDoiEmail}
                 />
               </div>
             </div>
@@ -104,9 +166,14 @@ export default function DangKy() {
               <label>Mật Khẩu</label>
               <div className="input-wrapper">
                 <Lock className="input-icon" size={20} />
-                <input type="password" placeholder="••••••••" required />
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  value={matkhau}
+                  onChange={thayDoiMatKhau}
+                />
               </div>
-              <span className="input-hint">Phải có ít nhất 8 ký tự</span>
+              <span className="input-hint">Phải có ít nhất 6 ký tự</span>
             </div>
 
             <div className="auth-checkbox-container">
@@ -116,13 +183,19 @@ export default function DangKy() {
               </label>
             </div>
 
-            <button type="submit" className="auth-submit-btn">
+            <button
+              type="submit"
+              className="auth-submit-btn"
+              onClick={handleDangKy}
+            >
               Tạo Tài Khoản
             </button>
           </form>
 
           <div className="auth-footer">
-            <p>Đã có tài khoản? Đăng nhập</p>
+            <p>
+              Đã có tài khoản? <Link to="/dangnhap">Đăng nhập</Link>
+            </p>
           </div>
 
           <div className="auth-divider">
