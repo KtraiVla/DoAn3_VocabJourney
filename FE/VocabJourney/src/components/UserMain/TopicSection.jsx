@@ -1,9 +1,8 @@
 import "./TopicsSection.css";
 import TopicCard from "./TopicCard.jsx";
 import img1 from "../../assets/images/dulich.jpg";
-import img2 from "../../assets/images/dulich.jpg";
-import img3 from "../../assets/images/dulich.jpg";
-
+import img2 from "../../assets/images/dongvat.jpg";
+import img3 from "../../assets/images/nhahang.jpg";
 
 export default function TopicsSection() {
   const topics = [
@@ -17,7 +16,7 @@ export default function TopicsSection() {
     },
     {
       image: img2,
-      title: "Tiếng Anh Thương Mại",
+      title: "Thế giới động vật",
       lessons: 12,
       words: 144,
       percent: 45,

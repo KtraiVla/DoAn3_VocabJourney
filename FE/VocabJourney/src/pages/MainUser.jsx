@@ -5,6 +5,7 @@ import StatsSection from "../components/UserMain/StatsSection.jsx";
 import ContinueCard from "../components/UserMain/ContinueCard.jsx";
 import ReviewCard from "../components/UserMain/ReviewCard.jsx";
 import ChallengesSection from "../components/UserMain/ChallengeSection.jsx";
+import TopicsSection from "../components/UserMain/TopicSection.jsx";
 
 function MainUser() {
   return (
@@ -20,6 +21,7 @@ function MainUser() {
             <div className="homeuser-right">
               <ContinueCard />
               <ReviewCard />
+              <TopicsSection></TopicsSection>
             </div>
 
             {/* cột bên trái */}
