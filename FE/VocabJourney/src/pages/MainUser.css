@@ -24,6 +24,9 @@
 .dashboard-sidebar {
   position: sticky;
   top: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 /* Responsive */
