@@ -6,6 +6,7 @@ import DangKy from "./components/DangKy/DangKy.jsx";
 import DangNhap from "./components/DangNhap/DangNhap.jsx";
 import MainUser from "./pages/MainUser.jsx";
 import ChuDePage from "./pages/ChuDePage.jsx";
+import PhanThuongPage from "./pages/PhanThuongPage.jsx";
 
 import "./App.css";
 
@@ -17,6 +18,7 @@ function App() {
       <Route path="/dangnhap" element={<DangNhap />} />
       <Route path="/homeuser" element={<MainUser />} />
       <Route path="/chude" element={<ChuDePage />} />
+      <Route path="/phanthuong" element={<PhanThuongPage />} />
     </Routes>
   );
 }

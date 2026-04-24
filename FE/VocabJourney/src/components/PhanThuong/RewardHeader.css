@@ -1,0 +1,14 @@
+.reward-header {
+  margin-top: 50px;
+}
+
+.reward-header-title {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.reward-header-desc{
+    color: #64748b;
+}

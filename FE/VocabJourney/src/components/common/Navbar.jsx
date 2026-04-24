@@ -19,7 +19,7 @@ function DashboardNavbar() {
     { path: "/homeuser", icon: <Home size={20} />, label: "Trang Chủ" },
     { path: "/chude", icon: <Book size={20} />, label: "Chủ Đề" },
     {
-      path: "/dashboard/rewards",
+      path: "/phanthuong",
       icon: <Trophy size={20} />,
       label: "Phần Thưởng",
     },
