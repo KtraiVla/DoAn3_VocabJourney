@@ -1,0 +1,54 @@
+.streak-card.reward-card-base {
+  background: #ff6600;
+  color: white;
+  padding: 20px 24px;
+  border-radius: 24px;
+}
+
+.streak-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.streak-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.streak-label {
+  font-size: 14px;
+  opacity: 0.9;
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0px;
+}
+
+.streak-count {
+  font-size: 36px;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1;
+}
+
+.streak-message-box {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 16px 20px;
+  border-radius: 16px;
+}
+
+.streak-title-msg {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 1;
+}
+
+.streak-subtitle-msg {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+  font-weight: 500;
+}
