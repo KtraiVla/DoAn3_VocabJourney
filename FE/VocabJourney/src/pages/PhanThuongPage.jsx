@@ -2,24 +2,32 @@ import Navbar from "../components/common/Navbar.jsx";
 import RewardHeader from "../components/PhanThuong/RewardHeader.jsx";
 import LevelProgressCard from "../components/PhanThuong/LevelProgressCard.jsx";
 import StreakCard from "../components/PhanThuong/StreakCard.jsx";
-import BagdeSection from "../components/PhanThuong/BagdeSection.jsx";
+import BadgeSection from "../components/PhanThuong/BadgeSection.jsx";
+import "./PhanThuongPage.css";
 
 export default function PhanThuongPage() {
   return (
     <div className="reward-page">
-      <Navbar></Navbar>
+      <Navbar />
       <div className="reward-body">
         <div className="container">
-          <RewardHeader></RewardHeader>
-          <div className="reward-content">
-            {/* cột bên trái */}
-            <div className="reward-content-left">
-              <LevelProgressCard></LevelProgressCard>
-              <BagdeSection></BagdeSection>
+          <RewardHeader />
+
+          {/* Cấp độ hiện tại nằm trên cùng, full-width trong container */}
+
+          <div className="reward-body-content">
+            {/* Cột bên trái: Nội dung chính */}
+            <div className="reward-main">
+              <BadgeSection />
+              <LevelProgressCard />
+
+              {/* Thêm các section thử thách ở đây sau */}
             </div>
-            {/* cột bên phải */}
+
+            {/* Cột bên phải: Sidebar */}
             <div className="reward-sidebar">
-              <StreakCard></StreakCard>
+              <StreakCard />
+              {/* Thêm các card thống kê, xếp hạng ở đây sau */}
             </div>
           </div>
         </div>

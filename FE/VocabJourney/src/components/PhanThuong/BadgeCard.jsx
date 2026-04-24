@@ -1,7 +1,7 @@
 import { Lock } from "lucide-react";
 import "./BadgeCard.css";
 
-export default function BagdeCard({
+export default function BadgeCard({
   name,
   description,
   date,

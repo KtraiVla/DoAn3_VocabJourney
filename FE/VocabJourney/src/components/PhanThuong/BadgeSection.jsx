@@ -1,6 +1,7 @@
-import BagdeCard from "./BagdeCard.jsx";
+import BadgeCard from "./BadgeCard.jsx";
+import { Award } from "lucide-react";
 
-export default function BagdeSection() {
+export default function BadgeSection() {
   const badges = [
     {
       id: 1,
