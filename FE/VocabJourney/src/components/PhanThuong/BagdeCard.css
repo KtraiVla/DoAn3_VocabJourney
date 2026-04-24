@@ -1,0 +1,77 @@
+.badge-card {
+  border-radius: 20px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: default;
+  border: 1px solid transparent;
+}
+
+.badge-card.unlocked {
+  /* bgColor and borderColor handled in JSX style prop */
+}
+
+.badge-card.locked {
+  background-color: #fcfcfc;
+  border: 1px solid #f1f1f1;
+}
+
+.badge-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.badge-icon-container {
+  margin-bottom: 12px;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 6px 0;
+}
+
+.badge-card.locked .badge-name {
+  color: #64748b;
+}
+
+.badge-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.badge-status {
+  margin-top: auto;
+}
+
+.unlocked-date {
+  font-size: 13px;
+  color: #10b981;
+  font-weight: 700;
+}
+
+.locked-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.locked-info svg {
+  color: #fbbf24; /* Gold lock */
+}
