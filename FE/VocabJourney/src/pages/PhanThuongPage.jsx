@@ -16,7 +16,6 @@ export default function PhanThuongPage() {
       <div className="reward-body">
         <div className="container">
           <RewardHeader />
-
           {/* Cấp độ hiện tại nằm trên cùng, full-width trong container */}
 
           <div className="reward-body-content">
