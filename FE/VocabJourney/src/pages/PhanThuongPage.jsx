@@ -18,16 +18,14 @@ export default function PhanThuongPage() {
           <div className="reward-body-content">
             {/* Cột bên trái: Nội dung chính */}
             <div className="reward-main">
-              <BadgeSection />
               <LevelProgressCard />
+              <BadgeSection />
 
-              {/* Thêm các section thử thách ở đây sau */}
             </div>
 
             {/* Cột bên phải: Sidebar */}
             <div className="reward-sidebar">
               <StreakCard />
-              {/* Thêm các card thống kê, xếp hạng ở đây sau */}
             </div>
           </div>
         </div>

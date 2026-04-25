@@ -1,6 +1,6 @@
 import BadgeCard from "./BadgeCard.jsx";
 import { Award } from "lucide-react";
-
+import "./BadgeSection.css";
 export default function BadgeSection() {
   const badges = [
     {

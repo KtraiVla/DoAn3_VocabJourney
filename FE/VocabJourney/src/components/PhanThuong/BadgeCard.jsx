@@ -15,7 +15,7 @@ export default function BadgeCard({
       className={`badge-card ${unlocked ? "unlocked" : "locked"}`}
       style={
         unlocked
-          ? { backgroundColor: bgColor, border: `1px solid ${borderColor}` }
+          ? { backgroundColor: bgColor, border: `2px solid ${borderColor}` }
           : {}
       }
     >
