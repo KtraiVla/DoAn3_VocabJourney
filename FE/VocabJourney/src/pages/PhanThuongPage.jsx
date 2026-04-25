@@ -4,6 +4,9 @@ import LevelProgressCard from "../components/PhanThuong/LevelProgressCard.jsx";
 import StreakCard from "../components/PhanThuong/StreakCard.jsx";
 import BadgeSection from "../components/PhanThuong/BadgeSection.jsx";
 import ChallengesSection from "../components/PhanThuong/ChallengesSection.jsx";
+import QuickStatsCard from "../components/PhanThuong/QuickStatsCard.jsx";
+import RankCard from "../components/PhanThuong/RankCard.jsx";
+
 import "./PhanThuongPage.css";
 
 export default function PhanThuongPage() {

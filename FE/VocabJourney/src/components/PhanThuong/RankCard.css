@@ -1,0 +1,69 @@
+.weekly-rank-card {
+  text-align: center;
+}
+
+.rank-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.rank-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.rank-display-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.rank-circle {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+  border: 4px solid white;
+}
+
+.rank-number {
+  font-size: 32px;
+  font-weight: 800;
+  color: white;
+}
+
+.rank-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+.rank-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.rank-pill {
+  background-color: #f8fafc;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: #64748b;
+  border: 1px solid #f1f5f9;
+}
+
+.rank-pill span {
+  color: #0ea5e9;
+  font-weight: 700;
+}
