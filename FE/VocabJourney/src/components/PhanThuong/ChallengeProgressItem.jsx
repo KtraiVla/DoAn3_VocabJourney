@@ -21,6 +21,7 @@ export default function ChallengeProgressItem({
             className="type-pill"
             style={{ color: typeColor, backgroundColor: typeBg }}
           >
+            {type === "Hàng Ngày" ? "🗓️ " : "📅 "}
             {type}
           </span>
           <span className="xp-pill">{xp} XP</span>
@@ -30,16 +31,16 @@ export default function ChallengeProgressItem({
       <h4 className="challenge-title">{title}</h4>
       <p className="challenge-desc">{description}</p>
 
-      <div className="challenge-progress-container">
+      <div className="reward-challenge-progress-container">
         <div className="progress-labels">
           <span>Tiến độ</span>
           <span>
             {current} / {total}
           </span>
         </div>
-        <div className="challenge-progress-bar">
+        <div className="reward-challenge-progress-bar">
           <div
-            className="challenge-progress-fill"
+            className="reward-challenge-progress-fill"
             style={{ width: `${progressPercent}%` }}
           ></div>
         </div>

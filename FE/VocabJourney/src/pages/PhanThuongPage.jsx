@@ -6,6 +6,8 @@ import BadgeSection from "../components/PhanThuong/BadgeSection.jsx";
 import ChallengesSection from "../components/PhanThuong/ChallengesSection.jsx";
 import QuickStatsCard from "../components/PhanThuong/QuickStatsCard.jsx";
 import RankCard from "../components/PhanThuong/RankCard.jsx";
+import MotivationCard from "../components/PhanThuong/MotivationCard.jsx";
+
 
 import "./PhanThuongPage.css";
 
@@ -29,6 +31,9 @@ export default function PhanThuongPage() {
             {/* Cột bên phải: Sidebar */}
             <div className="reward-sidebar">
               <StreakCard />
+              <QuickStatsCard/>
+              <RankCard/>
+              <MotivationCard/>
             </div>
           </div>
         </div>

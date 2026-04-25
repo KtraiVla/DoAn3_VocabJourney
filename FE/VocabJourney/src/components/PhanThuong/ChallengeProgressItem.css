@@ -11,38 +11,40 @@
 
 .challenge-type-pills {
   display: flex;
+  align-items: center;
   gap: 12px;
 }
 
 .type-pill {
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .xp-pill {
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
-  color: #f97316;
-  padding: 4px 0;
+  color: #ea580c;
 }
 
 .challenge-title {
   margin: 0 0 4px 0;
-  font-size: 18px;
-  font-weight: 700;
-  color: #1e293b;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
 }
 
 .challenge-desc {
-  margin: 0 0 20px 0;
-  font-size: 14px;
+  margin: 0 0 16px 0;
+  font-size: 15px;
   color: #64748b;
 }
 
-.challenge-progress-container {
+.reward-challenge-progress-container {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -51,21 +53,25 @@
 .progress-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   color: #64748b;
 }
 
-.challenge-progress-bar {
-  height: 10px;
-  background-color: #e2e8f0;
-  border-radius: 5px;
+.progress-labels span:last-child {
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.reward-challenge-progress-bar {
+  height: 8px;
+  background-color: #cbd5e1;
+  border-radius: 4px;
   overflow: hidden;
 }
 
-.challenge-progress-fill {
+.reward-challenge-progress-fill {
   height: 100%;
   background-color: #0f172a;
-  border-radius: 5px;
+  border-radius: 4px;
 }
-

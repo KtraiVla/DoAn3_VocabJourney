@@ -1,6 +1,6 @@
 import "./ChallengesSection.css";
 import { Zap } from "lucide-react";
-
+import ChallengeProgressItem from "./ChallengeProgressItem.jsx";
 
 export default function ChallengesSection() {
   const challenges = [
