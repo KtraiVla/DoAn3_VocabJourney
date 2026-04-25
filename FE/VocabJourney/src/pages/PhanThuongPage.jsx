@@ -3,6 +3,7 @@ import RewardHeader from "../components/PhanThuong/RewardHeader.jsx";
 import LevelProgressCard from "../components/PhanThuong/LevelProgressCard.jsx";
 import StreakCard from "../components/PhanThuong/StreakCard.jsx";
 import BadgeSection from "../components/PhanThuong/BadgeSection.jsx";
+import ChallengesSection from "../components/PhanThuong/ChallengesSection.jsx";
 import "./PhanThuongPage.css";
 
 export default function PhanThuongPage() {
@@ -20,7 +21,7 @@ export default function PhanThuongPage() {
             <div className="reward-main">
               <LevelProgressCard />
               <BadgeSection />
-
+              <ChallengesSection></ChallengesSection>
             </div>
 
             {/* Cột bên phải: Sidebar */}
