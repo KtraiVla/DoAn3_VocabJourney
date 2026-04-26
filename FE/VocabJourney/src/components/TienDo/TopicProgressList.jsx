@@ -1,5 +1,6 @@
 import "./TopicProgressList.css";
 import { BookOpen, Briefcase, Coffee, Sun, Laptop } from "lucide-react";
+import TopicProgressItem from "./TopicProgressItem.jsx";
 
 export default function TopicProgressList() {
   const topics = [

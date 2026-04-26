@@ -1,0 +1,35 @@
+.progress-page {
+  margin-bottom: 20px;
+}
+
+.progress-page-container {
+  min-height: 100vh;
+  background-color: #f8fafc; /* Very light gray/blue background like Dashboard */
+}
+
+.progress-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.progress-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.progress-topics-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+  .progress-charts-grid,
+  .progress-topics-grid {
+    grid-template-columns: 1fr;
+  }
+}

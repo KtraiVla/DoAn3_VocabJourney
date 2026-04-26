@@ -13,9 +13,9 @@ import "./AccuracyChart.css";
 function CustomTooltip({ active, payload, label }) {
   if (active && payload && payload.length) {
     return (
-      <div className="custom-tool-tip">
+      <div className="custom-tooltip">
         <p className="tooltip-label">{label}</p>
-        <p className="tooltip-value"> Độ chính xác: {payload[0].value}</p>
+        <p className="tooltip-value"> Độ chính xác: {payload[0].value}%</p>
       </div>
     );
   }

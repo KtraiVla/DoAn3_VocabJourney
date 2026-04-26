@@ -2,14 +2,14 @@
   padding: 24px;
 }
 
-.stats-header {
+.quick-stats-header {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 24px;
 }
 
-.stats-header h3 {
+.quick-stats-header h3 {
   margin: 0;
   font-size: 18px;
   font-weight: 700;

@@ -1,4 +1,4 @@
-import { PieChart, Pie, ResponsiveContainer, Tooltip } from "recharts";
+import { PieChart, Pie, ResponsiveContainer, Tooltip, Cell } from "recharts";
 import "./StudyDistributionCard.css";
 
 function CustomTooltip({ active, payload, total }) {

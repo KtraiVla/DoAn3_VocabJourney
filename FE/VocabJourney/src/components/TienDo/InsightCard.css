@@ -1,0 +1,40 @@
+.insight-card {
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.insight-icon {
+  margin-bottom: 16px;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.insight-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.insight-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #1e293b;
+}
+
+.insight-text {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  color: #334155;
+  font-weight: 500;
+}
+
+.insight-text b {
+  font-weight: 800;
+  color: #0f172a;
+}

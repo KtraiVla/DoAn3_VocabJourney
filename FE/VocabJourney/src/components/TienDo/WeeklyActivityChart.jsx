@@ -7,6 +7,7 @@ import {
   Tooltip, // hộp thông tin khi trỏ chuột
   ResponsiveContainer,
 } from "recharts";
+import "./WeeklyActivityChart.css";
 
 // tạo một hộp thông tin tùy chỉnh
 function CustomTooltip({ active, payload, label }) {

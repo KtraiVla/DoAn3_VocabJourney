@@ -12,7 +12,7 @@ export default function QuickStatsCard() {
 
   return (
     <div className="quick-stats-card reward-card-base">
-      <div className="stats-header">
+      <div className="quick-stats-header">
         <Star size={18} color="#f59e0b" fill="#f59e0b" />
         <h3>Thống Kê Nhanh</h3>
       </div>
