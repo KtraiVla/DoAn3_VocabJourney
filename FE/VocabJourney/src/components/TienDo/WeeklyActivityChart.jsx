@@ -1,6 +1,28 @@
 import "./WeeklyActivityChart.css";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from "recharts";
 
-export default function WeeklyActivityChart() {
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="custom-tooltip">
+        <p className="tooltip-label">{`Ngày: ${label}`}</p>
+        <p className="tooltip-value">{`Đã học: ${payload[0].value} từ`}</p>
+      </div>
+    );
+  }
+  return null;
+};
+
+function WeeklyActivityChart() {
   const data = [
     { day: "T2", value: 12 },
     { day: "T3", value: 15 },
@@ -11,51 +33,48 @@ export default function WeeklyActivityChart() {
     { day: "CN", value: 16 },
   ];
 
-  const maxValue = 20;
   return (
     <div className="activity-chart-card">
       <h3 className="activity-chart-title">Hoạt Động Học Tập Hàng Tuần</h3>
 
-      <div className="chart-container">
-        {/* Y-axis labels */}
-        <div className="y-axis">
-          <span>20</span>
-          <span>15</span>
-          <span>10</span>
-          <span>5</span>
-          <span>0</span>
-        </div>
-
-        {/* Chart area */}
-        <div className="chart-area">
-          {/* Grid lines */}
-          <div className="grid-lines">
-            <div className="grid-line"></div>
-            <div className="grid-line"></div>
-            <div className="grid-line"></div>
-            <div className="grid-line"></div>
-            <div className="grid-line"></div>
-          </div>
-
-          {/* Bars */}
-          <div className="bars-container">
-            {data.map((item, index) => {
-              const heightPercent = Math.min(
-                (item.value / maxValue) * 100,
-                100,
-              );
-              return (
-                <div key={index} className="bar-wrapper">
-                  <div
-                    className="bar"
-                    style={{ height: `${heightPercent}%` }}
-                  ></div>
-                  <span className="x-axis-label">{item.day}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+      <div className="chart-container-recharts">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={data}
+            margin={{
+              top: 5,
+              right: 5,
+              left: -25,
+              bottom: 0,
+            }}
+          >
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              stroke="#f1f5f9"
+            />
+            <XAxis
+              dataKey="day"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#94a3b8", fontSize: 12 }}
+              dy={10}
+            />
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#94a3b8", fontSize: 12 }}
+              domain={[0, 25]}
+              ticks={[0, 5, 10, 15, 20, 25]}
+            />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: "#f8fafc" }} />
+            <Bar dataKey="value" radius={[4, 4, 0, 0]} maxBarSize={40}>
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill="#06b6d4" />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
       </div>
 
       <div className="chart-legend">
@@ -65,3 +84,5 @@ export default function WeeklyActivityChart() {
     </div>
   );
 }
+
+export default WeeklyActivityChart;
