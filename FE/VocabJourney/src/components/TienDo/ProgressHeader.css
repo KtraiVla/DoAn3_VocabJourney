@@ -1,0 +1,17 @@
+.progress-header {
+  margin-top: 50px;
+}
+
+.progress-header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.progress-header-icon{
+  color: #0ea5e9;
+}
+
+.progress-header-desc {
+  color: var(--text-color);
+}
