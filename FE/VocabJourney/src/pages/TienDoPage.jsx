@@ -20,8 +20,9 @@ export default function TienDoPage() {
               <AccuracyChart></AccuracyChart>
             </div>
         </div>
-
-        
+        <div className="progress-topics-grid">
+            
+        </div>
       </div>
     </div>
   );
