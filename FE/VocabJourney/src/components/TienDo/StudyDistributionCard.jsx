@@ -2,7 +2,7 @@ import { PieChart, Pie, ResponsiveContainer, Tooltip, Cell } from "recharts";
 import "./StudyDistributionCard.css";
 
 function CustomTooltip({ active, payload, total }) {
-  if (active & payload & (payload.length > 0)) {
+  if (active && payload && payload.length > 0) {
     const data = payload[0].payload;
     const percent = ((data.value / total) * 100).toFixed(1);
     return (

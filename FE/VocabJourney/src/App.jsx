@@ -8,6 +8,7 @@ import MainUser from "./pages/MainUser.jsx";
 import ChuDePage from "./pages/ChuDePage.jsx";
 import PhanThuongPage from "./pages/PhanThuongPage.jsx";
 import TienDoPage from "./pages/TienDoPage.jsx";
+import HoSoPage from "./pages/HoSoPage.jsx";
 
 import "./App.css";
 
@@ -21,7 +22,7 @@ function App() {
       <Route path="/chude" element={<ChuDePage />} />
       <Route path="/phanthuong" element={<PhanThuongPage />} />
       <Route path="/tiendo" element={<TienDoPage />} />
-      
+      <Route path="/hoso" element={<HoSoPage />} />
     </Routes>
   );
 }

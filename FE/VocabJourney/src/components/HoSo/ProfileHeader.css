@@ -1,0 +1,148 @@
+.profile-header-card {
+  background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  color: white;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+  margin-top: 50px;
+}
+
+.profile-header-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid white;
+  object-fit: cover;
+  background-color: #cbd5e1;
+}
+
+.profile-avatar-edit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: white;
+  color: #3b82f6;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s;
+}
+
+.profile-avatar-edit:hover {
+  transform: scale(1.1);
+}
+
+.profile-name {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.profile-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.level-icon {
+  color: #fbbf24;
+}
+
+.level-separator {
+  margin: 0 4px;
+  opacity: 0.7;
+}
+
+.profile-header-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-edit-btn {
+  background-color: white;
+  color: #3b82f6;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-edit-btn:hover {
+  background-color: #f8fafc;
+  transform: translateY(-2px);
+}
+
+.profile-header-placeholder {
+  width: 100%;
+  height: 40px;
+  background-color: white;
+  border-radius: 8px;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .profile-header-card {
+    flex-direction: column;
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  .profile-header-right {
+    flex-direction: row;
+    justify-content: stretch;
+  }
+
+  .profile-edit-btn,
+  .profile-header-placeholder {
+    flex: 1;
+    justify-content: center;
+  }
+}

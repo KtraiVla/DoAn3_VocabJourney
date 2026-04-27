@@ -28,7 +28,7 @@ function DashboardNavbar() {
       icon: <BarChart3 size={20} />,
       label: "Tiến Độ",
     },
-    { path: "/profile", icon: <User size={20} />, label: "Hồ Sơ" },
+    { path: "/hoso", icon: <User size={20} />, label: "Hồ Sơ" },
   ];
 
   return (
@@ -56,7 +56,7 @@ function DashboardNavbar() {
           ))}
         </div>
 
-        {/* Streak Indicator */}
+        {/* chuỗi */}
         <div className="db-streak-pill">
           <div className="db-streak-icon">
             {/* <Flame size={20} fill="#f97316" color="#f97316" /> */}
