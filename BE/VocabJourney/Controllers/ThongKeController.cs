@@ -73,5 +73,19 @@ namespace VocabJourney.Controllers
             var data = _repo.GetHoatDongGanDay(maNguoiDung);
             return Ok(new { success = true, data = data });
         }
+
+        [HttpGet("admin/summary")]
+        public IActionResult GetAdminSummary()
+        {
+            try
+            {
+                var data = _repo.GetAdminSummaryStats();
+                return Ok(new { success = true, data = data });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
     }
 }

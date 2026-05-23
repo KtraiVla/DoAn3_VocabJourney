@@ -36,10 +36,16 @@ const getBadgeIcon = (id) => {
   }
 };
 
-function BadgeItem({ id, title, desc, date, bgColor }) {
+function BadgeItem({ id, title, desc, date, bgColor, icon }) {
   return (
     <div className="badge-item" style={{ backgroundColor: bgColor }}>
-      <div className="badge-icon-container">{getBadgeIcon(id)}</div>
+      <div className="badge-icon-container">
+        {icon ? (
+          <span className="badge-icon-emoji" style={{ fontSize: "24px" }}>{icon}</span>
+        ) : (
+          getBadgeIcon(id)
+        )}
+      </div>
       <div className="badge-info">
         <h3 className="badge-title">{title}</h3>
         <p className="badge-desc">{desc}</p>

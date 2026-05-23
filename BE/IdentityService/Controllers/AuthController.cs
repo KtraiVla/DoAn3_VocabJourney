@@ -39,10 +39,22 @@ namespace IdentityService.Controllers
         {
             var user = _repo.GetUserCredentials(request.Username);
 
-            // Kiểm tra user có tồn tại và mật khẩu băm có khớp không
-            if (user.hashedPassword == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.hashedPassword))
+            // 1. Kiểm tra user có tồn tại không
+            if (user.hashedPassword == null)
             {
                 return Unauthorized(new { message = "Tài khoản hoặc mật khẩu không chính xác!" });
+            }
+
+            // 2. Kiểm tra mật khẩu có chính xác không (kiểm tra pass trước để bảo mật thông tin tài khoản bị khóa)
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.hashedPassword))
+            {
+                return Unauthorized(new { message = "Tài khoản hoặc mật khẩu không chính xác!" });
+            }
+
+            // 3. Kiểm tra trạng thái hoạt động (bị khóa hay hoạt động)
+            if (user.status != 1)
+            {
+                return BadRequest(new { message = "Tài khoản của bạn đã bị khóa! Vui lòng liên hệ quản trị viên." });
             }
 
             // Tạo Token cho phiên làm việc
@@ -87,6 +99,24 @@ namespace IdentityService.Controllers
 
             return BadRequest(new { message = "Tên đăng nhập hoặc Email đã tồn tại hoặc có lỗi xảy ra." });
         }
+
+        [HttpPut("admin/user/{id}")]
+        public IActionResult UpdateUserAdmin(int id, [FromBody] UpdateUserAdminRequest request)
+        {
+            int statusVal = request.Status.ToLower() == "active" ? 1 : 0;
+            if (_repo.UpdateUserAdmin(id, request.Username, request.Email, request.Role, statusVal))
+                return Ok(new { success = true, message = "Cập nhật thông tin người dùng thành công!" });
+
+            return BadRequest(new { success = false, message = "Tên đăng nhập hoặc Email đã tồn tại hoặc có lỗi xảy ra." });
+        }
+    }
+
+    public class UpdateUserAdminRequest
+    {
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Role { get; set; }
+        public string Status { get; set; }
     }
 
     public class UpdateProfileRequest

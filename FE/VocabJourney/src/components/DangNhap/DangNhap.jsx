@@ -59,8 +59,9 @@ function DangNhap() {
 
       alert("Bạn đã đăng nhập thành công!");
       navigate("/homeuser"); // Chuyển sang trang chủ
-    } catch {
-      alert("Sai tài khoản hoặc mật khẩu!");
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || "Sai tài khoản hoặc mật khẩu!";
+      alert(errorMsg);
     }
   }
 

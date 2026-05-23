@@ -33,6 +33,9 @@ const authService = {
 
   updateProfile: (userId, username, email) => {
     return axiosClient.put(`/Auth/user/${userId}`, { username, email });
+  },
+  updateUserAdmin: (userId, userData) => {
+    return axiosClient.put(`/Auth/admin/user/${userId}`, userData);
   }
 };
 

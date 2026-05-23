@@ -31,7 +31,7 @@ namespace VocabJourney.Repositories
                         ISNULL(t.SoQuizHomNay, 0) AS SoQuizHomNay,
                         ISNULL(t.DailyChallengeStatus, 0) AS DailyChallengeStatus,
                         t.NgayCapNhatXP,
-                        ISNULL((SELECT COUNT(*) + 1 FROM ThongKeNguoiDung WHERE DiemKinhNghiem > ISNULL(t.DiemKinhNghiem, 0)), (SELECT COUNT(*) + 1 FROM ThongKeNguoiDung)) AS ThuHang,
+                        ISNULL((SELECT COUNT(*) + 1 FROM ThongKeNguoiDung WHERE CapDo > ISNULL(t.CapDo, 1) OR (CapDo = ISNULL(t.CapDo, 1) AND DiemKinhNghiem > ISNULL(t.DiemKinhNghiem, 0))), (SELECT COUNT(*) + 1 FROM ThongKeNguoiDung)) AS ThuHang,
                         (SELECT COUNT(*) FROM TienDoTuVung WHERE MaNguoiDung = @MaNguoiDung AND DaHoc = 1) AS TongTuDaHoc,
                         (SELECT COUNT(*) FROM TienDoBaiHoc WHERE MaNguoiDung = @MaNguoiDung AND DaHoanThanh = 1) AS TongBaiHocDaXong,
                         (SELECT ISNULL(AVG(CAST(SoCauDung AS FLOAT) / CAST(NULLIF(TongSoCau, 0) AS FLOAT) * 100), 0) FROM KetQuaKiemTra WHERE MaNguoiDung = @MaNguoiDung) AS DoChinhXacTB,
@@ -378,14 +378,19 @@ namespace VocabJourney.Repositories
             List<object> dsChinhXac = new List<object>();
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                // Lấy 5 kết quả bài kiểm tra gần nhất
+                // Lấy 5 ngày gần nhất có làm bài kiểm tra và tính trung bình độ chính xác của ngày đó
                 string query = @"
-                    SELECT TOP 5 
-                        FORMAT(NgayLamBai, 'dd/MM') AS Ngay,
-                        ROUND(CAST(SoCauDung AS FLOAT) / CAST(NULLIF(TongSoCau, 0) AS FLOAT) * 100, 0) AS TiLe
-                    FROM KetQuaKiemTra
-                    WHERE MaNguoiDung = @MaNguoiDung
-                    ORDER BY NgayLamBai ASC";
+                    SELECT Ngay, TiLe FROM (
+                        SELECT TOP 5 
+                            CAST(NgayLamBai AS DATE) AS NgayGoc,
+                            FORMAT(NgayLamBai, 'dd/MM') AS Ngay,
+                            ROUND(AVG(CAST(SoCauDung AS FLOAT) / CAST(NULLIF(TongSoCau, 0) AS FLOAT) * 100), 0) AS TiLe
+                        FROM KetQuaKiemTra
+                        WHERE MaNguoiDung = @MaNguoiDung
+                        GROUP BY CAST(NgayLamBai AS DATE), FORMAT(NgayLamBai, 'dd/MM')
+                        ORDER BY NgayGoc DESC
+                    ) sub
+                    ORDER BY NgayGoc ASC";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -555,6 +560,47 @@ namespace VocabJourney.Repositories
                 }
             }
             return dsHoatDong;
+        }
+
+        public object GetAdminSummaryStats()
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                int tongNguoiDung = 0;
+                int tongChuDe = 0;
+                int tongTuVung = 0;
+                int tongHuyHieu = 0;
+
+                string query = @"
+                    SELECT 
+                        (SELECT COUNT(*) FROM NguoiDung) AS TongNguoiDung,
+                        (SELECT COUNT(*) FROM ChuDe) AS TongChuDe,
+                        (SELECT COUNT(*) FROM TuVung) AS TongTuVung,
+                        (SELECT COUNT(*) FROM HuyHieu) AS TongHuyHieu";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            tongNguoiDung = Convert.ToInt32(reader["TongNguoiDung"]);
+                            tongChuDe = Convert.ToInt32(reader["TongChuDe"]);
+                            tongTuVung = Convert.ToInt32(reader["TongTuVung"]);
+                            tongHuyHieu = Convert.ToInt32(reader["TongHuyHieu"]);
+                        }
+                    }
+                }
+
+                return new
+                {
+                    tongNguoiDung = tongNguoiDung,
+                    tongChuDe = tongChuDe,
+                    tongTuVung = tongTuVung,
+                    tongHuyHieu = tongHuyHieu
+                };
+            }
         }
     }
 }

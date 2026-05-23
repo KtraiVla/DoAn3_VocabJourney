@@ -27,6 +27,10 @@ const statsService = {
     const response = await axiosUser.get(`/ThongKe/recent/${maNguoiDung}`);
     return response;
   },
+  getAdminSummary: async () => {
+    const response = await axiosUser.get("/ThongKe/admin/summary");
+    return response;
+  },
 };
 
 export default statsService;

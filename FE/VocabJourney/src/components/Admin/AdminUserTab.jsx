@@ -32,10 +32,29 @@ const AdminUserTab = () => {
   }, []);
 
   const handleModalOk = () => {
-    form.validateFields().then((values) => {
-      console.log('Lưu người dùng:', values);
-      message.info('Tính năng Thêm/Sửa người dùng từ Admin đang được phát triển');
-      setIsModalVisible(false);
+    form.validateFields().then(async (values) => {
+      try {
+        if (editingRecord) {
+          const response = await authService.updateUserAdmin(editingRecord.id, {
+            username: values.username,
+            email: values.email,
+            role: values.role,
+            status: values.status
+          });
+          if (response && response.status === 200) {
+            message.success('Cập nhật thông tin người dùng thành công');
+            setIsModalVisible(false);
+            fetchUsers();
+          }
+        } else {
+          message.info('Tính năng Thêm người dùng mới từ Admin đang được phát triển');
+          setIsModalVisible(false);
+        }
+      } catch (error) {
+        console.error('Lỗi khi cập nhật người dùng:', error);
+        const errorMsg = error.response?.data?.message || 'Cập nhật thất bại, vui lòng thử lại.';
+        message.error(errorMsg);
+      }
     });
   };
 

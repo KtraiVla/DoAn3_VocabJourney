@@ -50,7 +50,7 @@ export default function AccuracyChart() {
 
   return (
     <div className="accuracy-chart-card">
-      <h3 className="accuracy-chart-title">Xu Hướng Độ Chính Xác (5 bài gần nhất)</h3>
+      <h3 className="accuracy-chart-title">Xu Hướng Độ Chính Xác (5 ngày gần nhất)</h3>
       <div className="chart-container-recharts">
         {accuracyData.length > 0 ? (
           <ResponsiveContainer width="100%" height="100%">

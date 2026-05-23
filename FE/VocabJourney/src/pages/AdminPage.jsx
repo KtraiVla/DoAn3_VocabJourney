@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Card, Col, Row, Tabs } from 'antd';
 import { 
   SettingOutlined, 
@@ -18,34 +18,55 @@ import AdminLessonTab from '../components/Admin/AdminLessonTab';
 import AdminQuizTab from '../components/Admin/AdminQuizTab';
 import AdminGamificationTab from '../components/Admin/AdminGamificationTab';
 import AdminAnalyticsTab from '../components/Admin/AdminAnalyticsTab';
+import statsService from '../services/statsService';
 import './AdminPage.css';
 
 const AdminPage = () => {
   const navigate = useNavigate();
+  const [stats, setStats] = useState({
+    tongNguoiDung: 0,
+    tongChuDe: 0,
+    tongTuVung: 0,
+    tongHuyHieu: 0
+  });
+
+  useEffect(() => {
+    const fetchSummaryStats = async () => {
+      try {
+        const response = await statsService.getAdminSummary();
+        if (response && response.data && response.data.success) {
+          setStats(response.data.data);
+        }
+      } catch (error) {
+        console.error('Lỗi khi tải thống kê tổng quan admin:', error);
+      }
+    };
+    fetchSummaryStats();
+  }, []);
 
   // Dữ liệu cho các thẻ thống kê tổng quan (Top Cards)
   const statsCards = [
     {
       title: 'Tổng Người Dùng',
-      value: '4',
+      value: stats.tongNguoiDung.toString(),
       icon: <TeamOutlined className="admin-stat-icon" />,
       color: '#00a8cc' // Màu xanh lam đậm
     },
     {
       title: 'Chủ Đề Hoạt Động',
-      value: '6',
+      value: stats.tongChuDe.toString(),
       icon: <BookOutlined className="admin-stat-icon" />,
       color: '#a855f7' // Màu tím
     },
     {
       title: 'Từ Vựng',
-      value: '6',
+      value: stats.tongTuVung.toString(),
       icon: <FileTextOutlined className="admin-stat-icon" />,
       color: '#f97316' // Màu cam
     },
     {
       title: 'Thành Tích',
-      value: '6',
+      value: stats.tongHuyHieu.toString(),
       icon: <TrophyOutlined className="admin-stat-icon" />,
       color: '#10b981' // Màu xanh lá
     }

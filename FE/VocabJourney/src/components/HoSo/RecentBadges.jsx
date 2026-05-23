@@ -13,13 +13,14 @@ const RecentBadges = () => {
         const maNguoiDung = localStorage.getItem("maNguoiDung");
         if (maNguoiDung) {
           const response = await badgeService.getUserBadges(maNguoiDung);
-          if (response && response.data) {
+          if (response && response.data && response.data.success && Array.isArray(response.data.data)) {
             // Lấy 3 huy hiệu mới nhất
-            const formattedBadges = response.data.slice(0, 3).map(b => ({
+            const formattedBadges = response.data.data.slice(0, 3).map(b => ({
               id: b.maHuyHieu,
               title: b.tenHuyHieu,
               desc: b.moTa,
-              date: b.ngayDatDuoc ? new Date(b.ngayDatDuoc).toLocaleDateString('vi-VN') : 'Đã đạt được',
+              icon: b.iconName,
+              date: (b.ngayNhan || b.ngayDatDuoc) ? new Date(b.ngayNhan || b.ngayDatDuoc).toLocaleDateString('vi-VN') : 'Đã đạt được',
               bgColor: '#fffbeb'
             }));
             setBadges(formattedBadges);

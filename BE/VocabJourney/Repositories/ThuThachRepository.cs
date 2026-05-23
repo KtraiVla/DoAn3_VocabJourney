@@ -26,13 +26,18 @@ namespace VocabJourney.Repositories
                            CASE 
                                WHEN h.TenHuyHieu LIKE N'%Học%' OR h.MoTa LIKE N'%Học%' THEN ISNULL(t.SoTuHocHomNay, 0)
                                WHEN h.TenHuyHieu LIKE N'%Ôn%' OR h.MoTa LIKE N'%Ôn%' THEN ISNULL(t.SoTuOnHomNay, 0)
-                               WHEN h.TenHuyHieu LIKE N'%Quiz%' OR h.TenHuyHieu LIKE N'%Kiểm tra%' THEN ISNULL(t.SoQuizHomNay, 0)
+                               WHEN h.TenHuyHieu LIKE N'%Quiz%' OR h.TenHuyHieu LIKE N'%Kiểm tra%' OR h.MoTa LIKE N'%Quiz%' OR h.MoTa LIKE N'%Kiểm tra%' THEN ISNULL(t.SoQuizHomNay, 0)
+                               WHEN h.TenHuyHieu LIKE N'%Combo%' OR h.MoTa LIKE N'%3 nhiệm vụ%' THEN 
+                                   (CASE WHEN (t.DailyChallengeStatus & 1) = 1 THEN 1 ELSE 0 END + 
+                                    CASE WHEN (t.DailyChallengeStatus & 2) = 2 THEN 1 ELSE 0 END + 
+                                    CASE WHEN (t.DailyChallengeStatus & 4) = 4 THEN 1 ELSE 0 END)
                                ELSE 0
                            END AS TienDoHienTai,
                            CASE 
                                WHEN (h.TenHuyHieu LIKE N'%Học%' OR h.MoTa LIKE N'%Học%') AND (t.DailyChallengeStatus & 1) = 1 THEN 1
                                WHEN (h.TenHuyHieu LIKE N'%Ôn%' OR h.MoTa LIKE N'%Ôn%') AND (t.DailyChallengeStatus & 2) = 2 THEN 1
                                WHEN (h.TenHuyHieu LIKE N'%Quiz%' OR h.TenHuyHieu LIKE N'%Kiểm tra%' OR h.MoTa LIKE N'%Quiz%') AND (t.DailyChallengeStatus & 4) = 4 THEN 1
+                               WHEN (h.TenHuyHieu LIKE N'%Combo%' OR h.MoTa LIKE N'%3 nhiệm vụ%') AND (t.DailyChallengeStatus & 8) = 8 THEN 1
                                ELSE 0
                            END AS DaNhanThuong
                     FROM HuyHieu h

@@ -16,14 +16,18 @@ namespace VocabJourney.Repositories
 
         public List<object> GetHuyHieuNguoiDung(int maNguoiDung)
         {
+            // Tự động đồng bộ tiến độ và trao/thu hồi huy hiệu trước khi lấy danh sách đã đạt được
+            GetHuyHieuVoiTiendo(maNguoiDung);
+
             List<object> dsHuyHieu = new List<object>();
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 string query = @"
-                    SELECT h.MaHuyHieu, h.TenHuyHieu, h.MoTa, h.IconName 
+                    SELECT h.MaHuyHieu, h.TenHuyHieu, h.MoTa, h.IconName, hn.NgayNhan 
                     FROM HuyHieuNguoiDung hn
                     JOIN HuyHieu h ON hn.MaHuyHieu = h.MaHuyHieu
-                    WHERE hn.MaNguoiDung = @MaNguoiDung";
+                    WHERE hn.MaNguoiDung = @MaNguoiDung
+                    ORDER BY hn.NgayNhan DESC";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -38,7 +42,8 @@ namespace VocabJourney.Repositories
                                 MaHuyHieu = Convert.ToInt32(reader["MaHuyHieu"]),
                                 TenHuyHieu = reader["TenHuyHieu"].ToString(),
                                 MoTa = reader["MoTa"].ToString(),
-                                IconName = reader["IconName"].ToString()
+                                IconName = reader["IconName"].ToString(),
+                                NgayNhan = reader["NgayNhan"] != DBNull.Value ? Convert.ToDateTime(reader["NgayNhan"]) : (DateTime?)null
                             });
                         }
                     }
@@ -58,6 +63,8 @@ namespace VocabJourney.Repositories
                 int tongTuDaHoc = 0;
                 int streakHienTai = 0;
                 int tongBaiKiemTra = 0;
+                int tongQuizPerfect = 0;
+                int tongCauDungQuiz = 0;
 
                 // Lấy tổng từ đã học
                 string sqlVocab = "SELECT COUNT(*) FROM TienDoTuVung WHERE MaNguoiDung = @MaNguoiDung AND DaHoc = 1";
@@ -67,13 +74,15 @@ namespace VocabJourney.Repositories
                     tongTuDaHoc = (int)cmd.ExecuteScalar();
                 }
 
-                // Lấy streak, bài kiểm tra và số chủ đề đã xong
+                // Lấy streak, bài kiểm tra, và các chỉ số Quiz nâng cao
                 int tongBaiHocDaXong = 0;
                 int tongChuDeDaXong = 0;
                 string sqlStats = @"
                     SELECT 
                         ISNULL((SELECT ChuoiNgayHoc FROM ThongKeNguoiDung WHERE MaNguoiDung = @MaNguoiDung), 0) as ChuoiNgayHoc,
                         ISNULL((SELECT COUNT(*) FROM KetQuaKiemTra WHERE MaNguoiDung = @MaNguoiDung), 0) as TongQuiz,
+                        ISNULL((SELECT COUNT(*) FROM KetQuaKiemTra WHERE MaNguoiDung = @MaNguoiDung AND SoCauDung = TongSoCau AND TongSoCau > 0), 0) as TongQuizPerfect,
+                        ISNULL((SELECT SUM(SoCauDung) FROM KetQuaKiemTra WHERE MaNguoiDung = @MaNguoiDung), 0) as TongCauDungQuiz,
                         ISNULL((SELECT COUNT(*) FROM TienDoBaiHoc WHERE MaNguoiDung = @MaNguoiDung AND DaHoanThanh = 1), 0) as TongBaiHoc,
                         ISNULL((SELECT COUNT(*) FROM (
                             SELECT b.MaChuDe 
@@ -92,6 +101,8 @@ namespace VocabJourney.Repositories
                         {
                             streakHienTai = reader["ChuoiNgayHoc"] != DBNull.Value ? Convert.ToInt32(reader["ChuoiNgayHoc"]) : 0;
                             tongBaiKiemTra = reader["TongQuiz"] != DBNull.Value ? Convert.ToInt32(reader["TongQuiz"]) : 0;
+                            tongQuizPerfect = reader["TongQuizPerfect"] != DBNull.Value ? Convert.ToInt32(reader["TongQuizPerfect"]) : 0;
+                            tongCauDungQuiz = reader["TongCauDungQuiz"] != DBNull.Value ? Convert.ToInt32(reader["TongCauDungQuiz"]) : 0;
                             tongBaiHocDaXong = reader["TongBaiHoc"] != DBNull.Value ? Convert.ToInt32(reader["TongBaiHoc"]) : 0;
                             tongChuDeDaXong = reader["TongChuDe"] != DBNull.Value ? Convert.ToInt32(reader["TongChuDe"]) : 0;
                         }
@@ -102,9 +113,9 @@ namespace VocabJourney.Repositories
                 string query = @"
                     SELECT h.MaHuyHieu, h.TenHuyHieu, h.MoTa, h.IconName, h.DieuKien,
                            CAST(CASE WHEN hn.MaNguoiDung IS NOT NULL THEN 1 ELSE 0 END AS BIT) AS DaDatDuoc
-                    FROM HuyHieu h
-                    LEFT JOIN HuyHieuNguoiDung hn ON h.MaHuyHieu = hn.MaHuyHieu AND hn.MaNguoiDung = @MaNguoiDung
-                    WHERE ISNULL(h.LoaiHuyHieu, 1) != 2";
+                     FROM HuyHieu h
+                     LEFT JOIN HuyHieuNguoiDung hn ON h.MaHuyHieu = hn.MaHuyHieu AND hn.MaNguoiDung = @MaNguoiDung
+                     WHERE ISNULL(h.LoaiHuyHieu, 1) != 2";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -115,39 +126,74 @@ namespace VocabJourney.Repositories
                         {
                             int maHuyHieu = Convert.ToInt32(reader["MaHuyHieu"]);
                             string ten = reader["TenHuyHieu"].ToString().ToLower();
+                            string dieuKien = reader["DieuKien"] != DBNull.Value ? reader["DieuKien"].ToString() : "";
+                            string dieuKienLower = dieuKien.ToLower();
                             
                             int currentVal = 0;
                             int targetVal = 100; // Mặc định
 
-                            // Logic phân loại tiến độ thông minh hơn (Kiểm tra cả tên và mô tả)
-                            string mota = reader["MoTa"].ToString().ToLower();
-                            string searchStr = ten + " " + mota;
+                            // 1. Ưu tiên phân loại tiến độ theo trường DieuKien
+                            if (!string.IsNullOrEmpty(dieuKienLower))
+                            {
+                                if (dieuKienLower.StartsWith("hoc_") && dieuKienLower.EndsWith("_tu")) {
+                                    currentVal = tongTuDaHoc;
+                                    targetVal = ExtractNumber(dieuKien);
+                                } else if (dieuKienLower.StartsWith("streak_") && (dieuKienLower.EndsWith("_ngay") || dieuKienLower.EndsWith("_day"))) {
+                                    currentVal = streakHienTai;
+                                    targetVal = ExtractNumber(dieuKien);
+                                } else if (dieuKienLower.StartsWith("hoan_thanh_") && (dieuKienLower.EndsWith("_bai") || dieuKienLower.EndsWith("_lesson"))) {
+                                    currentVal = tongBaiHocDaXong;
+                                    targetVal = ExtractNumber(dieuKien);
+                                } else if (dieuKienLower.StartsWith("quiz_perfect_")) {
+                                    currentVal = tongQuizPerfect;
+                                    targetVal = ExtractNumber(dieuKien);
+                                } else if (dieuKienLower.StartsWith("quiz_dung_") && (dieuKienLower.EndsWith("_cau") || dieuKienLower.EndsWith("_question"))) {
+                                    currentVal = tongCauDungQuiz;
+                                    targetVal = ExtractNumber(dieuKien);
+                                }
+                            }
+                            else
+                            {
+                                // 2. Fallback sang logic phân loại theo chuỗi (khi DieuKien bị trống)
+                                string mota = reader["MoTa"].ToString().ToLower();
+                                string searchStr = ten + " " + mota;
 
-                            if (searchStr.Contains("từ vựng") || searchStr.Contains("ngôn ngữ") || searchStr.Contains("từ") || searchStr.Contains("tu")) {
-                                currentVal = tongTuDaHoc;
-                                targetVal = ExtractNumber(reader["MoTa"].ToString());
-                            } else if (searchStr.Contains("streak") || searchStr.Contains("chăm chỉ") || searchStr.Contains("ngày") || searchStr.Contains("ngay")) {
-                                currentVal = streakHienTai;
-                                targetVal = ExtractNumber(reader["MoTa"].ToString());
-                            } else if (searchStr.Contains("kiểm tra") || searchStr.Contains("quiz") || searchStr.Contains("ktr") || searchStr.Contains("trắc nghiệm") || searchStr.Contains("trac nghiem")) {
-                                currentVal = tongBaiKiemTra;
-                                targetVal = ExtractNumber(reader["MoTa"].ToString());
-                            } else if (searchStr.Contains("chủ đề") || searchStr.Contains("chu de")) {
-                                currentVal = tongChuDeDaXong;
-                                targetVal = ExtractNumber(reader["MoTa"].ToString());
-                            } else if (searchStr.Contains("bài học") || searchStr.Contains("bài") || searchStr.Contains("khai phá") || searchStr.Contains("khám phá") || searchStr.Contains("bai") || searchStr.Contains("bách khoa") || searchStr.Contains("bach khoa")) {
-                                currentVal = tongBaiHocDaXong;
-                                targetVal = ExtractNumber(reader["MoTa"].ToString());
+                                if (searchStr.Contains("từ vựng") || searchStr.Contains("ngôn ngữ") || searchStr.Contains("từ đã học") || searchStr.Contains("học từ")) {
+                                    currentVal = tongTuDaHoc;
+                                    targetVal = ExtractNumber(reader["MoTa"].ToString());
+                                } else if (searchStr.Contains("streak") || searchStr.Contains("chăm chỉ") || searchStr.Contains("ngày") || searchStr.Contains("ngay")) {
+                                    currentVal = streakHienTai;
+                                    targetVal = ExtractNumber(reader["MoTa"].ToString());
+                                } else if (searchStr.Contains("kiểm tra") || searchStr.Contains("quiz") || searchStr.Contains("ktr") || searchStr.Contains("trắc nghiệm") || searchStr.Contains("trac nghiem")) {
+                                    if (searchStr.Contains("tuyệt đối") || searchStr.Contains("tối đa")) {
+                                        currentVal = tongQuizPerfect;
+                                    } else if (searchStr.Contains("trả lời đúng") || searchStr.Contains("câu đúng")) {
+                                        currentVal = tongCauDungQuiz;
+                                    } else {
+                                        currentVal = tongBaiKiemTra;
+                                    }
+                                    targetVal = ExtractNumber(reader["MoTa"].ToString());
+                                } else if (searchStr.Contains("chủ đề") || searchStr.Contains("chu de")) {
+                                    currentVal = tongChuDeDaXong;
+                                    targetVal = ExtractNumber(reader["MoTa"].ToString());
+                                } else if (searchStr.Contains("bài học") || searchStr.Contains("bài") || searchStr.Contains("khai phá") || searchStr.Contains("khám phá") || searchStr.Contains("bai") || searchStr.Contains("bách khoa") || searchStr.Contains("bach khoa")) {
+                                    currentVal = tongBaiHocDaXong;
+                                    targetVal = ExtractNumber(reader["MoTa"].ToString());
+                                }
                             }
 
                             bool daDatDuoc = Convert.ToBoolean(reader["DaDatDuoc"]);
                             
-                            // --- LOGIC TỰ ĐỘNG ĐỒNG BỘ ---
-                            // Nếu đã đủ tiến độ nhưng chưa có trong bảng HuyHieuNguoiDung
+                            // --- LOGIC TỰ ĐỘNG ĐỒNG BỘ (NHẬN / THU HỒI) ---
                             if (!daDatDuoc && currentVal >= targetVal && targetVal > 0) {
                                 AwardBadgeAutomatically(maNguoiDung, maHuyHieu);
                                 daDatDuoc = true; // Cập nhật trạng thái hiển thị ngay
                                 currentVal = targetVal; // Ép tiến độ về max
+                            }
+                            else if (daDatDuoc && currentVal < targetVal) {
+                                // Tự động thu hồi nếu người dùng không đủ điều kiện (do lỗi logic cũ trước đây)
+                                RevokeBadgeAutomatically(maNguoiDung, maHuyHieu);
+                                daDatDuoc = false;
                             }
 
                             if (daDatDuoc) {
@@ -162,7 +208,7 @@ namespace VocabJourney.Repositories
                                 TenHuyHieu = reader["TenHuyHieu"].ToString(),
                                 MoTa = reader["MoTa"].ToString(),
                                 IconName = reader["IconName"].ToString(),
-                                DieuKien = reader["DieuKien"] != DBNull.Value ? reader["DieuKien"].ToString() : "",
+                                DieuKien = dieuKien,
                                 DaDatDuoc = daDatDuoc,
                                 CurrentProgress = currentVal,
                                 TargetProgress = targetVal,
@@ -175,6 +221,28 @@ namespace VocabJourney.Repositories
             return dsHuyHieu;
         }
 
+        private void RevokeBadgeAutomatically(int maNguoiDung, int maHuyHieu)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    string query = "DELETE FROM HuyHieuNguoiDung WHERE MaNguoiDung = @MaNguoiDung AND MaHuyHieu = @MaHuyHieu";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaNguoiDung", maNguoiDung);
+                        cmd.Parameters.AddWithValue("@MaHuyHieu", maHuyHieu);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi tự động thu hồi huy hiệu: " + ex.Message);
+            }
+        }
+
         private void AwardBadgeAutomatically(int maNguoiDung, int maHuyHieu)
         {
             try
@@ -182,7 +250,7 @@ namespace VocabJourney.Repositories
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
                     string query = "IF NOT EXISTS (SELECT 1 FROM HuyHieuNguoiDung WHERE MaNguoiDung = @MaNguoiDung AND MaHuyHieu = @MaHuyHieu) " +
-                                   "INSERT INTO HuyHieuNguoiDung (MaNguoiDung, MaHuyHieu, NgayDatDuoc) VALUES (@MaNguoiDung, @MaHuyHieu, GETDATE())";
+                                   "INSERT INTO HuyHieuNguoiDung (MaNguoiDung, MaHuyHieu, NgayNhan) VALUES (@MaNguoiDung, @MaHuyHieu, GETDATE())";
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@MaNguoiDung", maNguoiDung);

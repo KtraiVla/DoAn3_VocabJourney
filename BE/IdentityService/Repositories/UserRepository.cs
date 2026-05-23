@@ -52,12 +52,12 @@ namespace IdentityService.Repositories
             }
         }
 
-        public (string hashedPassword, int userId, string role) GetUserCredentials(string username)
+        public (string hashedPassword, int userId, string role, int status) GetUserCredentials(string username)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                // Lấy mật khẩu đã băm, ID và Vai trò của người dùng
-                string query = "SELECT MatKhau, MaNguoiDung, VaiTro FROM NguoiDung WHERE (TenDangNhap = @Username OR Email = @Username) AND TrangThaiHoatDong = 1";
+                // Lấy mật khẩu đã băm, ID, Vai trò và Trạng thái hoạt động của người dùng
+                string query = "SELECT MatKhau, MaNguoiDung, VaiTro, TrangThaiHoatDong FROM NguoiDung WHERE TenDangNhap = @Username OR Email = @Username";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Username", username);
@@ -66,12 +66,17 @@ namespace IdentityService.Repositories
                     {
                         if (reader.Read())
                         {
-                            return (reader["MatKhau"].ToString(), (int)reader["MaNguoiDung"], reader["VaiTro"].ToString());
+                            return (
+                                reader["MatKhau"].ToString(), 
+                                (int)reader["MaNguoiDung"], 
+                                reader["VaiTro"].ToString(),
+                                Convert.ToInt32(reader["TrangThaiHoatDong"])
+                            );
                         }
                     }
                 }
             }
-            return (null, 0, null);
+            return (null, 0, null, 0);
         }
 
         public (string username, string email, DateTime joinDate) GetUserById(int userId)
@@ -110,7 +115,7 @@ namespace IdentityService.Repositories
                         n.NgayTao,
                         ISNULL(tk.CapDo, 1) AS CapDo,
                         ISNULL(tk.DiemKinhNghiem, 0) AS DiemKinhNghiem,
-                        ISNULL(tk.TongTuDaHoc, 0) AS TongTuDaHoc,
+                        (SELECT COUNT(*) FROM TienDoTuVung WHERE MaNguoiDung = n.MaNguoiDung AND DaHoc = 1) AS TongTuDaHoc,
                         n.TrangThaiHoatDong
                     FROM NguoiDung n
                     LEFT JOIN ThongKeNguoiDung tk ON n.MaNguoiDung = tk.MaNguoiDung";
@@ -216,6 +221,35 @@ namespace IdentityService.Repositories
                 {
                     cmd.Parameters.AddWithValue("@Username", newUsername);
                     cmd.Parameters.AddWithValue("@Email", newEmail);
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    int result = cmd.ExecuteNonQuery();
+                    return result > 0;
+                }
+            }
+        }
+
+        public bool UpdateUserAdmin(int userId, string username, string email, string role, int status)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                // Kiểm tra trùng lặp (trừ user hiện tại)
+                string checkQuery = "SELECT COUNT(1) FROM NguoiDung WHERE (TenDangNhap = @Username OR Email = @Email) AND MaNguoiDung != @UserId";
+                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@Username", username);
+                    checkCmd.Parameters.AddWithValue("@Email", email);
+                    checkCmd.Parameters.AddWithValue("@UserId", userId);
+                    conn.Open();
+                    if ((int)checkCmd.ExecuteScalar() > 0) return false;
+                }
+
+                string query = "UPDATE NguoiDung SET TenDangNhap = @Username, Email = @Email, VaiTro = @Role, TrangThaiHoatDong = @Status WHERE MaNguoiDung = @UserId";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Username", username);
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("@Role", role);
+                    cmd.Parameters.AddWithValue("@Status", status);
                     cmd.Parameters.AddWithValue("@UserId", userId);
                     int result = cmd.ExecuteNonQuery();
                     return result > 0;
