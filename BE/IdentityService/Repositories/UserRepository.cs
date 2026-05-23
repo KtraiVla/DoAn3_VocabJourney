@@ -94,7 +94,7 @@ namespace IdentityService.Repositories
                     }
                 }
             }
-            return (null, null, DateTime.MinValue, null);
+            return (null, null, DateTime.MinValue);
         }
         public List<object> GetAllUsers()
         {

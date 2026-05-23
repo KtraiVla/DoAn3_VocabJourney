@@ -17,7 +17,6 @@ export default function ChuDeChiTietPage() {
     const fetchTopicDetail = async () => {
       try {
         setIsLoading(true);
-        // Luôn gọi API để lấy dữ liệu mới nhất (đặc biệt là Tiến độ)
         const maNguoiDung = localStorage.getItem("maNguoiDung");
         const response = await topicService.getTopicById(id, maNguoiDung);
         const topic = response.data;
@@ -33,6 +32,7 @@ export default function ChuDeChiTietPage() {
           },
           progress: topic.tienDo || 0,
         });
+
       } catch (error) {
         console.error("Lỗi khi lấy chi tiết chủ đề:", error);
       } finally {
@@ -43,6 +43,7 @@ export default function ChuDeChiTietPage() {
     if (id) {
       fetchTopicDetail();
     }
+
   }, [id, location.state]);
 
   if (isLoading) {

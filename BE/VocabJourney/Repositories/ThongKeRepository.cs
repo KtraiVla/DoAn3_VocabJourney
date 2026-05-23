@@ -203,7 +203,7 @@ namespace VocabJourney.Repositories
                 {
                     // Vẫn cập nhật các chỉ số đếm cho dù không cộng XP
                     CapNhatChiSoHienTai(maNguoiDung, xpHomNay, soTuOn, soTuHoc, soQuiz, challengeStatus, conn, exists);
-                    return;
+                    return result;
                 }
 
                 int newXP = currentXP + totalAdd;
@@ -472,14 +472,21 @@ namespace VocabJourney.Repositories
                         
                         UNION ALL
 
-                        -- 3. Bài kiểm tra (Tính XP thực tế)
+                        -- 3. Bài kiểm tra (Tính XP thực tế - Chỉ tính cho lần đầu làm)
                         SELECT 
                             'QUIZ' AS Loai, 
-                            N'Làm bài kiểm tra (' + CAST(SoCauDung AS NVARCHAR) + '/' + CAST(TongSoCau AS NVARCHAR) + ')' AS NoiDung, 
-                            NgayLamBai AS ThoiGian,
-                            (SoCauDung * 4 + 20 + (CASE WHEN SoCauDung = TongSoCau AND TongSoCau >= 15 THEN 30 ELSE 0 END)) AS DiemXP
-                        FROM KetQuaKiemTra
-                        WHERE MaNguoiDung = @MaNguoiDung
+                            N'Làm bài kiểm tra (' + CAST(k.SoCauDung AS NVARCHAR) + '/' + CAST(k.TongSoCau AS NVARCHAR) + ')' AS NoiDung, 
+                            k.NgayLamBai AS ThoiGian,
+                            CASE WHEN NOT EXISTS (
+                                SELECT 1 
+                                FROM KetQuaKiemTra 
+                                WHERE MaNguoiDung = k.MaNguoiDung 
+                                  AND MaBaiKiemTra = k.MaBaiKiemTra 
+                                  AND NgayLamBai < k.NgayLamBai
+                            ) THEN (k.SoCauDung * 4 + 20 + (CASE WHEN k.SoCauDung = k.TongSoCau AND k.TongSoCau >= 15 THEN 30 ELSE 0 END))
+                            ELSE 0 END AS DiemXP
+                        FROM KetQuaKiemTra k
+                        WHERE k.MaNguoiDung = @MaNguoiDung
 
                         UNION ALL
 
@@ -525,6 +532,7 @@ namespace VocabJourney.Repositories
                           AND (DailyChallengeStatus & 8) = 8
                           AND CAST(NgayCapNhatXP AS DATE) = CAST(GETDATE() AS DATE)
                     ) AS Activities
+                    WHERE DiemXP > 0
                     ORDER BY ThoiGian DESC";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))

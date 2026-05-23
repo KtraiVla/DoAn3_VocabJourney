@@ -5,7 +5,7 @@ import "./LessonPath.css";
 import baihocService from "../../services/baihocService.js";
 
 export default function LessonPath() {
-  const { id } = useParams();
+  const { id } = useParams(); // Lấy ID từ URL
   const [baiHoc, setBaiHoc] = useState([]);
   const [dangTai, setDangTai] = useState(true);
 
@@ -18,9 +18,9 @@ export default function LessonPath() {
 
         if (ketQua.success) {
           let foundCurrent = false;
+
           const duLieuDaBienDoi = ketQua.data.map((bh) => {
             let status = "locked";
-            // Logic thông minh: Nếu DB báo đã xong HOẶC tiến độ từ vựng đạt 100%
             if (bh.daHoanThanh || bh.tienDo === 100) {
               status = "completed";
             } else if (!foundCurrent) {
@@ -36,6 +36,7 @@ export default function LessonPath() {
               status: status,
               progress: bh.tienDo,
             };
+
           });
           setBaiHoc(duLieuDaBienDoi);
         }
@@ -45,12 +46,15 @@ export default function LessonPath() {
         setDangTai(false);
       }
     };
+
     if (id) fetchBaiHoc();
+
   }, [id]);
 
   if (dangTai) return <div className="loading">Đang tải bài học...</div>;
 
   const lastCompletedIndex = baiHoc.findLastIndex(l => l.status === "completed");
+
   const activeLineHeight = baiHoc.length > 1 && lastCompletedIndex >= 0
     ? `${(lastCompletedIndex / (baiHoc.length - 1)) * 100}%`
     : "0%";

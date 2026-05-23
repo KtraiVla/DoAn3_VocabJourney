@@ -72,6 +72,7 @@ namespace VocabJourney.Repositories
                         oldSoLanOnDung = res != null ? Convert.ToInt32(res) : 0;
                     }
 
+                    int rowsAffected = cmd.ExecuteNonQuery();
                     saveResult.Success = rowsAffected > 0;
                     
                     if (rowsAffected > 0)
@@ -198,6 +199,8 @@ namespace VocabJourney.Repositories
             var saveResult = new SaveProgressResult { Success = false };
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
+                string checkFirstAttemptSql = "SELECT COUNT(1) FROM KetQuaKiemTra WHERE MaNguoiDung = @MaNguoiDung AND MaBaiKiemTra = @MaBaiKiemTra";
+
                 string query = @"
                     INSERT INTO KetQuaKiemTra (MaNguoiDung, MaBaiKiemTra, SoCauDung, TongSoCau, DiemSo, NgayLamBai) 
                     VALUES (@MaNguoiDung, @MaBaiKiemTra, @SoCauDung, @TongSoCau, @DiemSo, GETDATE())";
@@ -211,24 +214,40 @@ namespace VocabJourney.Repositories
                     cmd.Parameters.AddWithValue("@DiemSo", soCauDung); // Giả định điểm số = số câu đúng
 
                     conn.Open();
+
+                    // Kiểm tra xem đây có phải lần đầu làm bài kiểm tra này không
+                    bool isFirstAttempt = false;
+                    using (SqlCommand checkCmd = new SqlCommand(checkFirstAttemptSql, conn))
+                    {
+                        checkCmd.Parameters.AddWithValue("@MaNguoiDung", maNguoiDung);
+                        checkCmd.Parameters.AddWithValue("@MaBaiKiemTra", maBaiKiemTra);
+                        int count = (int)checkCmd.ExecuteScalar();
+                        isFirstAttempt = (count == 0);
+                    }
+
                     int rowsAffected = cmd.ExecuteNonQuery();
                     saveResult.Success = rowsAffected > 0;
 
                     if (rowsAffected > 0)
                     {
-                        // Tính toán XP theo đúng bản thiết kế
-                        // Mỗi câu đúng +4 XP, Hoàn thành +20 XP, Perfect +30 XP
-                        int xpGoc = (soCauDung * 4) + 20;
-                        if (soCauDung == tongCauHoi && tongCauHoi >= 15) 
+                        int xpGoc = 0;
+                        if (isFirstAttempt)
                         {
-                            xpGoc += 30;
+                            // Tính toán XP theo đúng bản thiết kế
+                            // Mỗi câu đúng +4 XP, Hoàn thành +20 XP, Perfect +30 XP
+                            xpGoc = (soCauDung * 4) + 20;
+                            if (soCauDung == tongCauHoi && tongCauHoi >= 15) 
+                            {
+                                xpGoc += 30;
+                            }
+
+                            var thongKeRepo = new ThongKeRepository(_connectionString);
+                            var xpResult = thongKeRepo.CongXP(maNguoiDung, "QUIZ", xpGoc);
+                            saveResult.LeveledUp = xpResult.LeveledUp;
+                            saveResult.NewLevel = xpResult.NewLevel;
                         }
 
-                        var thongKeRepo = new ThongKeRepository(_connectionString);
-                        var xpResult = thongKeRepo.CongXP(maNguoiDung, "QUIZ", xpGoc);
-                        saveResult.LeveledUp = xpResult.LeveledUp;
-                        saveResult.NewLevel = xpResult.NewLevel;
-                        saveResult.XPEarned = xpGoc; // Gửi số XP gốc về (Chưa tính thưởng Daily Challenge ẩn)
+                        saveResult.XPEarned = xpGoc; // Gửi số XP thực tế nhận về (0 nếu làm lại)
                     }
 
                     return saveResult;

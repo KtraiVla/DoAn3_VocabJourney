@@ -117,7 +117,7 @@ export default function QuizPage() {
       try {
         const maNguoiDung = localStorage.getItem("maNguoiDung");
         if (maNguoiDung && quizId) {
-          const response = await progressService.saveQuizResult(maNguoiDung, score, totalQuestions, quizId);
+          const response = await progressService.saveQuizResult(parseInt(maNguoiDung), score, totalQuestions, quizId);
           if (response) {
             if (response.leveledUp) {
               setNewLevel(response.newLevel);
